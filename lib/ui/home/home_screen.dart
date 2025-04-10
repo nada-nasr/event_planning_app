@@ -1,5 +1,6 @@
+import 'package:event_planning_app/ui/home/tabs/profile/profile_tab.dart';
+import 'package:event_planning_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = 'home_screen';
@@ -10,8 +11,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.language),
+        backgroundColor: AppColors.primaryLight,
       ),
+      body: ProfileTab(),
     );
   }
 }

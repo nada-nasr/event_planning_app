@@ -1,10 +1,19 @@
+import 'package:event_planning_app/providers/language_provider.dart';
+import 'package:event_planning_app/providers/theme_provider.dart';
 import 'package:event_planning_app/ui/home/home_screen.dart';
 import 'package:event_planning_app/ui/splash_screen.dart';
+import 'package:event_planning_app/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LanguageProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ],
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,6 +21,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       title: 'Evently App',
       debugShowCheckedModeBanner: false,
@@ -22,7 +33,10 @@ class MyApp extends StatelessWidget {
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: Locale('en'),
+      locale: Locale(languageProvider.currentLocal),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeProvider.currentTheme,
     );
   }
 }
