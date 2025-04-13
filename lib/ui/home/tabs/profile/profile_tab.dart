@@ -8,6 +8,7 @@ import '../../../../providers/language_provider.dart';
 import '../../../../utils/app_colors.dart';
 
 class ProfileTab extends StatefulWidget {
+  static const String routeName = 'profile_tab';
   const ProfileTab({super.key});
 
   @override
