@@ -19,4 +19,6 @@ class AppAssets {
   static const String iconProfileSelected =
       'assets/images/icon_profile_selected.png';
   static const String profilePicture = 'assets/images/profile_pic.png';
+  static const String iconTheme = 'assets/images/icon_theme.png';
+  static const String birthdayImg = 'assets/images/birthday_img.png';
 }

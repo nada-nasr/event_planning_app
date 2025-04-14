@@ -27,9 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryLight,
-      ),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
             canvasColor: AppColors.transparentColor
@@ -40,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
               .primaryColor,
           padding: EdgeInsets.zero,
           shape: CircularNotchedRectangle(),
-          notchMargin: 3,
+          notchMargin: 2,
           child: BottomNavigationBar(
               currentIndex: selectedIndex,
               onTap: (index) {

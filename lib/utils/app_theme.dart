@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static final ThemeData lightTheme = ThemeData(
+    indicatorColor: AppColors.whiteColor,
+    focusColor: AppColors.whiteBgColor,
       primaryColor: AppColors.primaryLight,
+    cardColor: AppColors.primaryLight,
       scaffoldBackgroundColor: AppColors.whiteColor,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         elevation: 0,
@@ -32,12 +35,17 @@ class AppTheme {
           color: AppColors.whiteColor
       ),
       textTheme: TextTheme(
-          headlineLarge: AppStyles.bold20Black
-      )
+          headlineLarge: AppStyles.bold20Black,
+          headlineSmall: AppStyles.medium16Primary,
+          bodyLarge: AppStyles.bold16Black
+      ),
   );
 
   static final ThemeData darkTheme = ThemeData(
+      indicatorColor: AppColors.blackColor,
+      focusColor: AppColors.primaryLight,
       primaryColor: AppColors.primaryDark,
+      cardColor: AppColors.whiteColor,
       scaffoldBackgroundColor: AppColors.primaryDark,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         elevation: 0,
@@ -65,7 +73,9 @@ class AppTheme {
           color: AppColors.primaryDark
       ),
       textTheme: TextTheme(
-          headlineLarge: AppStyles.bold20white
+          headlineLarge: AppStyles.bold20white,
+          headlineSmall: AppStyles.medium16white,
+          bodyLarge: AppStyles.bold16White
       )
   );
 }
