@@ -41,6 +41,7 @@ dependencies:
   provider: ^6.1.4
   animated_toggle_switch: ^0.8.4
   language_code: ^0.5.5
+  icons_plus: ^5.0.0
 
 
 dev_dependencies:
