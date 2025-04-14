@@ -11,6 +11,7 @@ import '../utils/app_styles.dart';
 import 'home/home_screen.dart';
 
 class IntroScreen extends StatefulWidget {
+  static const String routeName = 'introduction_screen';
   const IntroScreen({super.key});
 
   @override
@@ -77,7 +78,10 @@ class _IntroScreenState extends State<IntroScreen> {
                       style: ToggleStyle(
                         borderColor: AppColors.primaryLight,
                         borderRadius: BorderRadius.circular(30),
-                        backgroundColor: AppColors.whiteColor,
+                        backgroundColor:
+                            isLightMode
+                                ? AppColors.whiteColor
+                                : AppColors.primaryDark,
                         indicatorColor: AppColors.primaryLight,
                       ),
                       values: [true, false],
@@ -122,7 +126,10 @@ class _IntroScreenState extends State<IntroScreen> {
                       style: ToggleStyle(
                         borderColor: AppColors.primaryLight,
                         borderRadius: BorderRadius.circular(30),
-                        backgroundColor: AppColors.whiteColor,
+                        backgroundColor:
+                            isLightMode
+                                ? AppColors.whiteColor
+                                : AppColors.primaryDark,
                         indicatorColor: AppColors.primaryLight,
                       ),
                       values: [true, false],
@@ -132,7 +139,10 @@ class _IntroScreenState extends State<IntroScreen> {
                             isLightMode
                                 ? Icons.light_mode_outlined
                                 : Icons.dark_mode,
-                            color: AppColors.whiteColor,
+                            color:
+                                isLightMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.primaryDark,
                           );
                         } else {
                           return Icon(
