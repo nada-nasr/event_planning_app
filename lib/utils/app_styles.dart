@@ -28,6 +28,11 @@ class AppStyles {
       fontSize: 14,
       color: AppColors.primaryLight
   );
+  static TextStyle bold16Primary = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+      color: AppColors.primaryLight
+  );
   static TextStyle bold16Black = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 16,
@@ -47,6 +52,11 @@ class AppStyles {
       fontWeight: FontWeight.w500,
       fontSize: 20,
       color: AppColors.primaryLight
+  );
+  static TextStyle medium20Black = TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 20,
+      color: AppColors.blackColor
   );
   static TextStyle medium16white = TextStyle(
       fontWeight: FontWeight.w500,

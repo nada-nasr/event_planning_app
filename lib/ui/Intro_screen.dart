@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
 import '../utils/app_styles.dart';
-import 'onboarding_screen/onboarding_screen.dart';
+import 'authentication/login/login_screen.dart';
 
 class IntroScreen extends StatefulWidget {
   static const String routeName = 'introduction_screen';
@@ -187,7 +187,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
               onPressed: () {
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => OnboardingScreen()),
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
                 );
               },
             ),

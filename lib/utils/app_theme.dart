@@ -70,7 +70,10 @@ class AppTheme {
           )*/
       ),
       appBarTheme: AppBarTheme(
-          color: AppColors.primaryDark
+          color: AppColors.primaryDark,
+          iconTheme: IconThemeData(
+              color: AppColors.primaryLight
+          )
       ),
       textTheme: TextTheme(
           headlineLarge: AppStyles.bold20white,

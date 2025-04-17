@@ -6,7 +6,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../providers/theme_provider.dart';
 import '../../utils/app_colors.dart';
-import '../home/home_screen.dart';
+import '../authentication/login/login_screen.dart';
 import 'onboarding_widget.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -161,7 +161,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void onClickFinish() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
+      MaterialPageRoute(builder: (context) => LoginScreen()),
     );
   }
 
