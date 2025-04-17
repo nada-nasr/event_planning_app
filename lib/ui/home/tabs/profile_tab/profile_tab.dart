@@ -1,4 +1,5 @@
 import 'package:event_planning_app/providers/theme_provider.dart';
+import 'package:event_planning_app/utils/app_assets.dart';
 import 'package:event_planning_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -25,6 +26,28 @@ class _ProfileTabState extends State<ProfileTab> {
     var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.primaryLight,
+        toolbarHeight: height * 0.20,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50))
+        ),
+        title: Row(
+          children: [
+            Image.asset(AppAssets.profilePicture),
+            SizedBox(width: width * 0.04),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Route Academy',
+                  style: AppStyles.bold24white,),
+                Text('route@gmail.com',
+                  style: AppStyles.medium16white,)
+              ],
+            )
+          ],
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: width * 0.05,
@@ -168,6 +191,26 @@ class _ProfileTabState extends State<ProfileTab> {
                 },
               ),
             ),
+            Spacer(),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.redColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)
+                    ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.06, vertical: height * 0.02)
+                ),
+                onPressed: () {},
+                child: Row(
+                  children: [
+                    Icon(Icons.logout, color: AppColors.whiteColor, size: 25,),
+                    Text(AppLocalizations.of(context)!.logout,
+                      style: AppStyles.regular14white,)
+                  ],
+                )
+            ),
+            SizedBox(height: height * 0.03,)
           ],
         ),
       ),
