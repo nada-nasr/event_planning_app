@@ -21,4 +21,9 @@ class AppAssets {
   static const String profilePicture = 'assets/images/profile_pic.png';
   static const String iconTheme = 'assets/images/icon_theme.png';
   static const String birthdayImg = 'assets/images/birthday_img.png';
+  static const String onboardingImg = 'assets/images/onbording_img1.png';
+  static const String onboardingImgLight2 = 'assets/images/onboarding_img2.png';
+  static const String onboardingImgLight3 = 'assets/images/onboarding_img3.png';
+  static const String onboardingImgDark1 = 'assets/images/onboarding_dark1.png';
+  static const String onboardingImgDark2 = 'assets/images/onboarding_dark2.png';
 }
