@@ -40,13 +40,6 @@ dependencies:
   #google_fonts: ^6.2.1
   provider: ^6.1.4
   animated_toggle_switch: ^0.8.4
-  language_code: ^0.5.5
-  icons_plus: ^5.0.0
-  smooth_page_indicator: ^1.2.1
-  firebase_core: ^3.13.0
-  cloud_firestore: ^5.6.6
-  fluttertoast: ^8.2.12
-  #shared_preferences: ^2.5.3
 
 
 dev_dependencies:
@@ -77,10 +70,6 @@ flutter:
     - assets/images/
     - assets/images/Splash Light.png
     - assets/images/Splash Dark.png
-    - assets/images/onboarding_img1.png
-    - assets/images/edit_icon.png
-    - assets/images/Calendar_icon.png
-    - assets/images/time_icon.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
