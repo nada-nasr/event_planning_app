@@ -33,6 +33,8 @@ class _ProfileTabState extends State<ProfileTab> {
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50))
         ),
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.start
+          ,
           children: [
             Image.asset(AppAssets.profilePicture),
             SizedBox(width: width * 0.04),

@@ -1,5 +1,6 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:event_planning_app/ui/authentication/login/login_screen.dart';
+import 'package:event_planning_app/ui/home/widget/custom_elevated_button.dart';
 import 'package:event_planning_app/ui/home/widget/custom_text_field.dart';
 import 'package:event_planning_app/utils/app_colors.dart';
 import 'package:event_planning_app/utils/app_styles.dart';
@@ -62,7 +63,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               /// Name
               CustomTextField(
-                prefixIcon: Image.asset(AppAssets.iconName),
+                prefixIcon: themeProvider.currentTheme == ThemeMode.light
+                    ? Image.asset(AppAssets.iconName)
+                    : Image.asset(AppAssets.iconNameDark),
                 hintText: AppLocalizations.of(context)!.name,
                 hintStyle:
                     themeProvider.currentTheme == ThemeMode.light
@@ -73,14 +76,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ? AppColors.greyColor
                         : AppColors.primaryLight,
 
-                ///controller: nameController,
-                ///validator: (text){},
+                controller: nameController,
+                validator: (text) {},
               ),
               SizedBox(height: height * 0.02),
 
               /// Email
               CustomTextField(
-                prefixIcon: Image.asset(AppAssets.iconEmail),
+                prefixIcon: themeProvider.currentTheme == ThemeMode.light
+                    ? Image.asset(AppAssets.iconEmail)
+                    : Image.asset(AppAssets.iconEmailDark),
                 hintText: AppLocalizations.of(context)!.email,
                 hintStyle:
                     themeProvider.currentTheme == ThemeMode.light
@@ -91,16 +96,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ? AppColors.greyColor
                         : AppColors.primaryLight,
 
-                ///controller: emailController,
-                ///validator: (text){},
+                controller: emailController,
+                validator: (text) {},
               ),
               SizedBox(height: height * 0.02),
 
               /// Password
               CustomTextField(
-                prefixIcon: Image.asset(AppAssets.iconPassword),
+                prefixIcon: themeProvider.currentTheme == ThemeMode.light
+                    ? Image.asset(AppAssets.iconPassword)
+                    : Image.asset(AppAssets.iconPasswordDark),
                 hintText: AppLocalizations.of(context)!.password,
-                suffixIcon: Image.asset(AppAssets.iconShowPassword),
+                suffixIcon: themeProvider.currentTheme == ThemeMode.light
+                    ? Image.asset(AppAssets.iconShowPassword)
+                    : Image.asset(AppAssets.iconShowPasswordDark),
                 hintStyle:
                     themeProvider.currentTheme == ThemeMode.light
                         ? AppStyles.medium16Gray
@@ -110,16 +119,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ? AppColors.greyColor
                         : AppColors.primaryLight,
 
-                ///controller: passwordController,
-                ///validator: (text){},
+                controller: passwordController,
+                validator: (text) {},
               ),
               SizedBox(height: height * 0.02),
 
               /// Re Password
               CustomTextField(
-                prefixIcon: Image.asset(AppAssets.iconPassword),
+                prefixIcon: themeProvider.currentTheme == ThemeMode.light
+                    ? Image.asset(AppAssets.iconPassword)
+                    : Image.asset(AppAssets.iconPasswordDark),
                 hintText: AppLocalizations.of(context)!.re_password,
-                suffixIcon: Image.asset(AppAssets.iconShowPassword),
+                suffixIcon: themeProvider.currentTheme == ThemeMode.light
+                    ? Image.asset(AppAssets.iconShowPassword)
+                    : Image.asset(AppAssets.iconShowPasswordDark),
                 hintStyle:
                     themeProvider.currentTheme == ThemeMode.light
                         ? AppStyles.medium16Gray
@@ -129,12 +142,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ? AppColors.greyColor
                         : AppColors.primaryLight,
 
-                ///controller: passwordController,
-                ///validator: (text){},
+                controller: passwordController,
+                validator: (text) {},
               ),
               SizedBox(height: height * 0.02),
 
-              /// Custom Elevated Button
+              CustomElevatedButton(
+                  onButtonClick: register,
+                  text: AppLocalizations.of(context)!.create_account),
               SizedBox(height: height * 0.02),
 
               Row(
@@ -212,5 +227,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  void register() {
+
   }
 }

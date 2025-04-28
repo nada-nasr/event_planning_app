@@ -29,7 +29,28 @@ class AppAssets {
   static const String resetPass = 'assets/images/reset_pass_img.png';
   static const String googleImg = 'assets/images/google_img.png';
   static const String iconName = 'assets/images/icon_name.png';
+  static const String iconNameDark = 'assets/images/icon_name_dark.png';
   static const String iconEmail = 'assets/images/icon_email.png';
+  static const String iconEmailDark = 'assets/images/icon_email_dark.png';
   static const String iconPassword = 'assets/images/icon_password.png';
+  static const String iconPasswordDark = 'assets/images/icon_password_dark.png';
   static const String iconShowPassword = 'assets/images/iconShowPassword.png';
+  static const String iconShowPasswordDark =
+      'assets/images/icon_showPassword_dark.png';
+  static const String sportImg = 'assets/images/sport.png';
+  static const String meetingImg = 'assets/images/meeting.png';
+  static const String gamingImg = 'assets/images/gaming.png';
+  static const String workshopImg = 'assets/images/workshop.png';
+  static const String bookClubImg = 'assets/images/Book Club.png';
+  static const String exhibitionImg = 'assets/images/exhibtion.png';
+  static const String holidayImg = 'assets/images/holiday.png';
+  static const String eatingImg = 'assets/images/eating.png';
+  static const String editIcon = 'assets/images/edit_icon.png';
+  static const String calenderIcon = 'assets/images/Calendar_icon.png';
+  static const String locationIcon = 'assets/images/location_icon.png';
+  static const String timeIcon = 'assets/images/time_icon.png';
+  static const String editIconDark = 'assets/images/icon_edit_dark.png';
+  static const String calenderIconDark = 'assets/images/Calendar_icon_dark.png';
+  static const String locationIconDark = 'assets/images/location_icon_dark.png';
+  static const String timeIconDark = 'assets/images/time_icon_dark.png';
 }

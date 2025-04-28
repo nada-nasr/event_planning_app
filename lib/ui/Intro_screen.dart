@@ -1,4 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:event_planning_app/ui/onboarding_screen/onboarding_screen.dart';
 import 'package:event_planning_app/utils/app_assets.dart';
 import 'package:event_planning_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
 import '../utils/app_styles.dart';
+import '../utils/shared_prefs_theming.dart';
 import 'authentication/login/login_screen.dart';
 
 class IntroScreen extends StatefulWidget {
@@ -187,7 +189,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
               onPressed: () {
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  MaterialPageRoute(builder: (context) => OnboardingScreen()),
                 );
               },
             ),

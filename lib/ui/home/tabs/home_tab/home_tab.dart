@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_planning_app/firebase_utils.dart';
 import 'package:event_planning_app/ui/home/tabs/home_tab/event_item.dart';
 import 'package:event_planning_app/ui/home/tabs/home_tab/event_tab_item.dart';
 import 'package:event_planning_app/utils/app_assets.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:icons_plus/icons_plus.dart';
 
+import '../../../../model/event.dart';
 import '../../../../utils/app_styles.dart';
 
 class HomeTab extends StatefulWidget {
@@ -15,9 +18,11 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   int selectedIndex = 0;
+  List<Event> eventsList = [];
 
   @override
   Widget build(BuildContext context) {
+    getAllEvents();
     var width = MediaQuery
         .of(context)
         .size
@@ -115,61 +120,141 @@ class _HomeTabState extends State<HomeTab> {
                                   eventName: eventsNameList[0],
                                   iconName: AntDesign.compass_outline,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[0])
+                                      eventsNameList.indexOf(eventsNameList[0]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                               EventTabItem(
                                   eventName: eventsNameList[1],
                                   iconName: Icons.directions_bike_rounded,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[1])
+                                      eventsNameList.indexOf(eventsNameList[1]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                               EventTabItem(
                                   eventName: eventsNameList[2],
                                   iconName: Icons.cake_outlined,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[2])
+                                      eventsNameList.indexOf(eventsNameList[2]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                               EventTabItem(
                                   eventName: eventsNameList[3],
                                   iconName: Icons.laptop_mac_rounded,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[3])
+                                      eventsNameList.indexOf(eventsNameList[3]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                               EventTabItem(
                                   eventName: eventsNameList[4],
                                   iconName: Iconsax.game_outline,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[4])
+                                      eventsNameList.indexOf(eventsNameList[4]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                               EventTabItem(
                                   eventName: eventsNameList[5],
                                   iconName: Icons.work_rounded,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[5])
+                                      eventsNameList.indexOf(eventsNameList[5]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                               EventTabItem(
                                   eventName: eventsNameList[6],
                                   iconName: EvaIcons.book,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[6])
+                                      eventsNameList.indexOf(eventsNameList[6]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                               EventTabItem(
                                   eventName: eventsNameList[7],
                                   iconName: Icons.museum_rounded,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[7])
+                                      eventsNameList.indexOf(eventsNameList[7]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                               EventTabItem(
                                   eventName: eventsNameList[8],
                                   iconName: Clarity.on_holiday_line,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[8])
+                                      eventsNameList.indexOf(eventsNameList[8]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                               EventTabItem(
                                   eventName: eventsNameList[9],
                                   iconName: Icons.fastfood_outlined,
                                   isSelected: selectedIndex ==
-                                      eventsNameList.indexOf(eventsNameList[9])
+                                      eventsNameList.indexOf(eventsNameList[9]),
+                                selectedBackgroundColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                selectedTextStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineSmall!,
+                                unSelectedTextStyle: AppStyles.medium16white,
                               ),
                             ]
                           /*eventsNameList.map((eventsName){
@@ -193,12 +278,27 @@ class _HomeTabState extends State<HomeTab> {
                           horizontal: width * 0.04,
                           vertical: height * 0.02
                       ),
-                      child: EventItem(),
+                      child: EventItem(
+                          event: eventsList[index]
+                      ),
                     );
                   },
-                  itemCount: 20),
+                  itemCount: eventsList.length
+              ),
             )
           ]),
     );
+  }
+
+  void getAllEvents() async {
+    print('in first');
+    QuerySnapshot<Event> querySnapshot = await FirebaseUtils
+        .getEventsCollection().get();
+
+    /// List<Event>    List<QueryDocumentSnapshot<Event>>
+    eventsList = querySnapshot.docs.map((doc) {
+      return doc.data();
+    }).toList();
+    print('in last');
   }
 }

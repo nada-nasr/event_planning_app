@@ -1,13 +1,14 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:event_planning_app/ui/authentication/register/register_screen.dart';
 import 'package:event_planning_app/ui/authentication/reset_password.dart';
+import 'package:event_planning_app/ui/home/home_screen.dart';
+import 'package:event_planning_app/ui/home/widget/custom_elevated_button.dart';
 import 'package:event_planning_app/ui/home/widget/custom_text_field.dart';
 import 'package:event_planning_app/utils/app_colors.dart';
 import 'package:event_planning_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../providers/language_provider.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../utils/app_assets.dart';
@@ -49,7 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: height * 0.02),
               CustomTextField(
-                prefixIcon: Image.asset(AppAssets.iconEmail),
+                prefixIcon: themeProvider.currentTheme == ThemeMode.light
+                    ? Image.asset(AppAssets.iconEmail)
+                    : Image.asset(AppAssets.iconEmailDark),
                 hintText: AppLocalizations.of(context)!.email,
                 hintStyle:
                     themeProvider.currentTheme == ThemeMode.light
@@ -60,25 +63,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         ? AppColors.greyColor
                         : AppColors.primaryLight,
 
-                ///controller: emailController,
-                ///validator: (text){},
+                controller: emailController,
+                validator: (text) {},
               ),
               SizedBox(height: height * 0.02),
               CustomTextField(
-                prefixIcon: Image.asset(AppAssets.iconPassword),
+                prefixIcon: themeProvider.currentTheme == ThemeMode.light
+                    ? Image.asset(AppAssets.iconPassword)
+                    : Image.asset(AppAssets.iconPasswordDark),
                 hintText: AppLocalizations.of(context)!.password,
                 hintStyle:
                     themeProvider.currentTheme == ThemeMode.light
                         ? AppStyles.medium16Gray
                         : AppStyles.medium16white,
-                suffixIcon: Image.asset(AppAssets.iconShowPassword),
+                suffixIcon: themeProvider.currentTheme == ThemeMode.light
+                    ? Image.asset(AppAssets.iconShowPassword)
+                    : Image.asset(AppAssets.iconShowPasswordDark),
                 borderColor:
                     themeProvider.currentTheme == ThemeMode.light
                         ? AppColors.greyColor
                         : AppColors.primaryLight,
 
-                ///controller: passwordController,
-                ///validator: (text){},
+                controller: passwordController,
+                validator: (text) {},
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -100,7 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: height * 0.02),
 
-              /// CustomElevatedbutton
+              CustomElevatedButton(
+                  onButtonClick: login,
+                  text: AppLocalizations.of(context)!.login),
               SizedBox(height: height * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -230,6 +239,12 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void login() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => HomeScreen()),
     );
   }
 }

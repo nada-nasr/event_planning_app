@@ -1,3 +1,4 @@
+import 'package:event_planning_app/ui/home/widget/custom_elevated_button.dart';
 import 'package:event_planning_app/utils/app_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -34,11 +35,14 @@ class ResetPassword extends StatelessWidget {
           vertical: height * 0.02,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset(AppAssets.resetPass),
             SizedBox(height: height * 0.04),
             CustomTextField(
-              prefixIcon: Image.asset(AppAssets.iconEmail),
+              prefixIcon: themeProvider.currentTheme == ThemeMode.light
+                  ? Image.asset(AppAssets.iconEmail)
+                  : Image.asset(AppAssets.iconEmailDark),
               hintText: AppLocalizations.of(context)!.email,
               hintStyle:
                   themeProvider.currentTheme == ThemeMode.light
@@ -49,14 +53,20 @@ class ResetPassword extends StatelessWidget {
                       ? AppColors.greyColor
                       : AppColors.primaryLight,
 
-              ///controller: emailController,
-              ///validator: (text){},
+              controller: emailController,
+              validator: (text) {},
             ),
-
-            /// Elevated Button ResetPassword
+            SizedBox(height: height * 0.04),
+            CustomElevatedButton(
+                onButtonClick: resetPassword,
+                text: AppLocalizations.of(context)!.re_password)
           ],
         ),
       ),
     );
+  }
+
+  void resetPassword() {
+
   }
 }

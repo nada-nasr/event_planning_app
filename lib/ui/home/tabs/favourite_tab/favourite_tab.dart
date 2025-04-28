@@ -44,7 +44,9 @@ class FavouriteTab extends StatelessWidget {
                           horizontal: width * 0.01,
                           vertical: height * 0.01
                       ),
-                      child: EventItem(),
+                        child: Container()
+
+                      ///EventItem(),
                     );
                   },
                   itemCount: 20),

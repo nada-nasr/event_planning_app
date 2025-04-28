@@ -25,7 +25,7 @@
   "email": "Email",
   "password": "Password",
   "name": "Name",
-  "re_password": "Re Password",
+  "re_password": "Reset Password",
   "already_have_account": "Already Have Account ?",
   "sport": "Sport",
   "birthday": "Birthday",

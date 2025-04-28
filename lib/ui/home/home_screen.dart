@@ -1,4 +1,5 @@
 import 'package:event_planning_app/ui/home/tabs/favourite_tab/favourite_tab.dart';
+import 'package:event_planning_app/ui/home/tabs/home_tab/add_event.dart';
 import 'package:event_planning_app/ui/home/tabs/home_tab/home_tab.dart';
 import 'package:event_planning_app/ui/home/tabs/map_tab/map_tab.dart';
 import 'package:event_planning_app/ui/home/tabs/profile_tab/profile_tab.dart';
@@ -75,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
             size: 30),
         onPressed: () {
           //todo: navigate to create event
+          Navigator.of(context).pushNamed(AddEvent.routeName);
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
