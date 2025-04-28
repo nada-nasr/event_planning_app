@@ -8,10 +8,9 @@ import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
 import '../utils/app_styles.dart';
-import 'authentication/login/login_screen.dart';
+import 'home/home_screen.dart';
 
 class IntroScreen extends StatefulWidget {
-  static const String routeName = 'introduction_screen';
   const IntroScreen({super.key});
 
   @override
@@ -78,10 +77,7 @@ class _IntroScreenState extends State<IntroScreen> {
                       style: ToggleStyle(
                         borderColor: AppColors.primaryLight,
                         borderRadius: BorderRadius.circular(30),
-                        backgroundColor:
-                            isLightMode
-                                ? AppColors.whiteColor
-                                : AppColors.primaryDark,
+                        backgroundColor: AppColors.whiteColor,
                         indicatorColor: AppColors.primaryLight,
                       ),
                       values: [true, false],
@@ -126,10 +122,7 @@ class _IntroScreenState extends State<IntroScreen> {
                       style: ToggleStyle(
                         borderColor: AppColors.primaryLight,
                         borderRadius: BorderRadius.circular(30),
-                        backgroundColor:
-                            isLightMode
-                                ? AppColors.whiteColor
-                                : AppColors.primaryDark,
+                        backgroundColor: AppColors.whiteColor,
                         indicatorColor: AppColors.primaryLight,
                       ),
                       values: [true, false],
@@ -139,10 +132,7 @@ class _IntroScreenState extends State<IntroScreen> {
                             isLightMode
                                 ? Icons.light_mode_outlined
                                 : Icons.dark_mode,
-                            color:
-                                isLightMode
-                                    ? AppColors.whiteColor
-                                    : AppColors.primaryDark,
+                            color: AppColors.whiteColor,
                           );
                         } else {
                           return Icon(
@@ -187,7 +177,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
               onPressed: () {
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
                 );
               },
             ),
