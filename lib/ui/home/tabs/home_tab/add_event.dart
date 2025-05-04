@@ -10,8 +10,11 @@ import 'package:event_planning_app/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../firebase_utils.dart';
+import '../../../../providers/event_list_provider.dart';
 import '../../../../providers/theme_provider.dart';
+import '../../../../providers/user_provider.dart';
 
 class AddEvent extends StatefulWidget {
   static const String routeName = 'add_event';
@@ -35,12 +38,14 @@ class _AddEventState extends State<AddEvent> {
   TextEditingController descriptionController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
+  late EventListProvider eventListProvider;
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     var themeProvider = Provider.of<ThemeProvider>(context);
+    eventListProvider = Provider.of<EventListProvider>(context);
     List<String> eventsNameList = [
       AppLocalizations.of(context)!.sport,
       AppLocalizations.of(context)!.birthday,
@@ -63,8 +68,8 @@ class _AddEventState extends State<AddEvent> {
       AppAssets.holidayImg,
       AppAssets.eatingImg,
     ];
-    String selectedImage = imageSelectedEventList[selectedIndex];
-    String selectedEventName = eventsNameList[selectedIndex];
+    selectedImage = imageSelectedEventList[selectedIndex];
+    selectedEventName = eventsNameList[selectedIndex];
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -272,6 +277,15 @@ class _AddEventState extends State<AddEvent> {
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(Duration(days: 365)),
+      builder: (context, child) =>
+          Theme(
+            data: ThemeData().copyWith(
+                colorScheme: ColorScheme.light(
+                    primary: AppColors.primaryLight,
+                    onPrimary: AppColors.whiteColor
+                )),
+            child: child!,
+          ),
     );
     if (chooseDate != null) {
       setState(() {
@@ -313,7 +327,20 @@ class _AddEventState extends State<AddEvent> {
       time: formatTime!,
       dateTime: selectedDate!,
     );
-    FirebaseUtils.addEventToFireStore(event).timeout(
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+    FirebaseUtils.addEventToFireStore(event, userProvider.currentUser!.id)
+        .then((value) {
+      //todo: toast
+      ToastUtils.toastMsg(
+        bgColor: AppColors.primaryLight,
+        textColor: AppColors.whiteColor,
+        msg: 'Event Added Successfully',
+      );
+      //todo: refresh events
+      eventListProvider.getAllEvents(userProvider.currentUser!.id);
+      Navigator.pop(context);
+    },
+    ).timeout(
       Duration(milliseconds: 500),
       onTimeout: () {
         //todo: toast
@@ -322,6 +349,8 @@ class _AddEventState extends State<AddEvent> {
           textColor: AppColors.whiteColor,
           msg: 'Event Added Successfully',
         );
+        //todo: refresh events
+        eventListProvider.getAllEvents(userProvider.currentUser!.id);
         Navigator.pop(context);
       },
     );

@@ -3,11 +3,16 @@ import 'package:event_planning_app/utils/app_colors.dart';
 import 'package:event_planning_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../providers/event_list_provider.dart';
+import '../../../../providers/theme_provider.dart';
+import '../../../../providers/user_provider.dart';
 import '../home_tab/event_item.dart';
 
 class FavouriteTab extends StatelessWidget {
-  const FavouriteTab({super.key});
+  FavouriteTab({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +24,12 @@ class FavouriteTab extends StatelessWidget {
         .of(context)
         .size
         .height;
+    var themeProvider = Provider.of<ThemeProvider>(context);
+    var eventListProvider = Provider.of<EventListProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
+    if (eventListProvider.favouriteEventsList.isEmpty) {
+      eventListProvider.getAllFavouriteEvents(userProvider.currentUser!.id);
+    }
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 0.04),
@@ -31,12 +42,17 @@ class FavouriteTab extends StatelessWidget {
               hintStyle: AppStyles.bold14Primary,
               prefixIcon: Icon(Icons.search, color: AppColors.primaryLight,),
 
-              ///labelText: 'Search',
-              ///suffixIcon: Icon(Icons.search, color: AppColors.primaryLight,),
             ),
             SizedBox(height: height * 0.02),
             Expanded(
-              child: ListView.builder(
+              child: eventListProvider.favouriteEventsList.isEmpty
+                  ? Center(
+                  child: Text(
+                      AppLocalizations.of(context)!.no_favourite_events_found,
+                      style: themeProvider.currentTheme == ThemeMode.light
+                          ? AppStyles.medium16black
+                          : AppStyles.medium16white))
+                  : ListView.builder(
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
                     return Padding(
@@ -44,12 +60,13 @@ class FavouriteTab extends StatelessWidget {
                           horizontal: width * 0.01,
                           vertical: height * 0.01
                       ),
-                        child: Container()
-
-                      ///EventItem(),
+                        child: EventItem(
+                            event: eventListProvider.favouriteEventsList[index]
+                        )
                     );
                   },
-                  itemCount: 20),
+                  itemCount: eventListProvider.favouriteEventsList.length
+              ),
             )
           ],
         ),

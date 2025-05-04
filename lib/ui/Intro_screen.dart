@@ -9,8 +9,6 @@ import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
 import '../utils/app_styles.dart';
-import '../utils/shared_prefs_theming.dart';
-import 'authentication/login/login_screen.dart';
 
 class IntroScreen extends StatefulWidget {
   static const String routeName = 'introduction_screen';
@@ -21,15 +19,28 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
-  bool isEnglish = true;
-  bool isLightMode = true;
+  ///bool isEnglish = true;
+  ///bool isLightMode = true;
+  late bool isEnglish;
+  late bool isLightMode;
+
+  @override
+  void initState() {
+    super.initState();
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final languageProvider = Provider.of<LanguageProvider>(
+        context, listen: false);
+    isLightMode = themeProvider.currentTheme == ThemeMode.light;
+    isEnglish = languageProvider.currentLocale.languageCode == 'en';
+  }
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    var languageProvider = Provider.of<LanguageProvider>(context);
-    var themeProvider = Provider.of<ThemeProvider>(context);
+    var languageProvider = Provider.of<LanguageProvider>(
+        context, listen: false);
+    var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(title: Image.asset(AppAssets.logoTop), centerTitle: true),
       body: Padding(

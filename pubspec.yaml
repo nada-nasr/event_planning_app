@@ -46,7 +46,9 @@ dependencies:
   firebase_core: ^3.13.0
   cloud_firestore: ^5.6.6
   fluttertoast: ^8.2.12
-  #shared_preferences: ^2.5.3
+  firebase_auth: ^5.5.3
+  google_sign_in: ^6.3.0
+  shared_preferences: ^2.5.3
 
 
 dev_dependencies:
@@ -81,6 +83,15 @@ flutter:
     - assets/images/edit_icon.png
     - assets/images/Calendar_icon.png
     - assets/images/time_icon.png
+    - assets/images/birthday_img.png
+    - assets/images/Book Club.png
+    - assets/images/exhibtion.png
+    - assets/images/gaming.png
+    - assets/images/holiday.png
+    - assets/images/meeting.png
+    - assets/images/sport.png
+    - assets/images/workshop.png
+    - assets/images/eating.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

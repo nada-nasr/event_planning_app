@@ -69,7 +69,6 @@ class AppTheme {
       datePickerTheme: DatePickerThemeData(
         backgroundColor: AppColors.whiteColor,
         dividerColor: AppColors.primaryLight,
-        todayBackgroundColor: WidgetStatePropertyAll(AppColors.primaryLight),
         cancelButtonStyle: ButtonStyle(
             foregroundColor: WidgetStatePropertyAll(AppColors.primaryLight)),
         confirmButtonStyle: ButtonStyle(
@@ -145,7 +144,6 @@ class AppTheme {
       datePickerTheme: DatePickerThemeData(
         backgroundColor: AppColors.whiteColor,
         dividerColor: AppColors.primaryLight,
-        todayBackgroundColor: WidgetStatePropertyAll(AppColors.primaryLight),
         cancelButtonStyle: ButtonStyle(
             foregroundColor: WidgetStatePropertyAll(AppColors.primaryLight)),
         confirmButtonStyle: ButtonStyle(
