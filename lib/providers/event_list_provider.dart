@@ -129,4 +129,73 @@ class EventListProvider extends ChangeNotifier {
     selectedIndex = newSelectedIndex;
     selectedIndex == 0 ? getAllEvents(uId) : getFilterEvents(uId);
   }
+
+  //todo: Delete event
+  Future<void> deleteEvent(String uId, String eventId) async {
+    await FirebaseUtils.getEventsCollection(uId).doc(eventId).delete();
+
+    eventsList.removeWhere((event) => event.id == eventId);
+    filterList.removeWhere((event) => event.id == eventId);
+
+    notifyListeners();
+  }
+
+  //todo: Update event
+
+  Future<void> fetchEvents(String uId) async {
+    final snapshot = await FirebaseUtils.getEventsCollection(uId).get();
+    eventsList = snapshot.docs.map((doc) {
+      return doc.data();
+    }).toList();
+    filterList = List.from(eventsList); // Initialize filter list
+    notifyListeners();
+  }
+
+  Future<void> updateEvent(String uId, Event updatedEvent) async {
+    try {
+      await FirebaseUtils.getEventsCollection(uId).doc(updatedEvent.id).update({
+        'title': updatedEvent.title,
+        'description': updatedEvent.description,
+        'image': updatedEvent.image,
+        'eventName': updatedEvent.eventName,
+        'time': updatedEvent.time,
+        'dateTime': updatedEvent.dateTime,
+      });
+      final indexInEvents = eventsList.indexWhere((event) =>
+      event.id == updatedEvent.id);
+      if (indexInEvents != -1) {
+        eventsList[indexInEvents] = updatedEvent;
+      }
+
+      final indexInFilter = filterList.indexWhere((event) =>
+      event.id == updatedEvent.id);
+      if (indexInFilter != -1) {
+        filterList[indexInFilter] = updatedEvent;
+      }
+
+      notifyListeners();
+    } catch (error) {
+      print("Error updating event: $error");
+      rethrow;
+    }
+  }
+
+  Event? getEventFromList(String eventId) {
+    try {
+      Event? event = eventsList.firstWhere((event) => event.id == eventId);
+      return event;
+    } catch (e) {
+      try {
+        Event? event = filterList.firstWhere((event) => event.id == eventId);
+        return event;
+      } catch (e) {
+        print("Error getting event from list: $e");
+        return null;
+      }
+    }
+  }
+
+
+
+
 }

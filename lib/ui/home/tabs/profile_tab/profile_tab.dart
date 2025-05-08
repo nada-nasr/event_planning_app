@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/language_provider.dart';
+import '../../../../providers/user_provider.dart';
 import '../../../../utils/app_colors.dart';
 
 class ProfileTab extends StatefulWidget {
@@ -38,6 +39,7 @@ class _ProfileTabState extends State<ProfileTab> {
     var height = MediaQuery.of(context).size.height;
     var languageProvider = Provider.of<LanguageProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -55,9 +57,9 @@ class _ProfileTabState extends State<ProfileTab> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Route Academy',
+                Text(userProvider.currentUser!.name,
                   style: AppStyles.bold24white,),
-                Text('route@gmail.com',
+                Text(userProvider.currentUser!.email,
                   style: AppStyles.medium16white,)
               ],
             )

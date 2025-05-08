@@ -42,4 +42,5 @@ class FirebaseUtils {
     ///getEventsCollection().doc().set(event);
     return docRef.set(event);
   }
+
 }

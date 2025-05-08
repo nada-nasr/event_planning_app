@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Event {
   // data class - model
   static const String collectionName = 'Events';
@@ -18,7 +20,7 @@ class Event {
     required this.eventName,
     required this.time,
     required this.dateTime,
-    this.isFavourite = false,
+    this.isFavourite = false
   });
 
   //todo: ison => object
@@ -30,7 +32,13 @@ class Event {
         image: data['image'],
         eventName: data['eventName'],
         time: data['time'],
-        dateTime: DateTime.fromMillisecondsSinceEpoch(data['dateTime']),
+    dateTime: data['dateTime'] != null
+        ? (data['dateTime'] is Timestamp
+        ? (data['dateTime'] as Timestamp).toDate()
+        : DateTime.fromMillisecondsSinceEpoch(data['dateTime'] as int))
+        : DateTime.now(),
+
+    ///DateTime.fromMillisecondsSinceEpoch(data['dateTime']),
         isFavourite: data['isFavourite'],
       );
 
