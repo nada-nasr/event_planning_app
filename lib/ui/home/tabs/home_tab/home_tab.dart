@@ -22,6 +22,15 @@ class _HomeTabState extends State<HomeTab> {
   List<Event> eventsList = [];
 
   @override
+  void initState() {
+    super.initState();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    Provider.of<EventListProvider>(context, listen: false).getAllEvents(
+        userProvider.currentUser!.id);
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
     var eventListProvider = Provider.of<EventListProvider>(context);

@@ -13,7 +13,6 @@ import 'package:event_planning_app/utils/app_styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../providers/language_provider.dart';
@@ -29,8 +28,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(
+      text: 'nada@gmail.com');
+  TextEditingController passwordController = TextEditingController(
+      text: '12345678');
   bool isEnglish = true;
   bool isLightMode = true;
 
@@ -232,14 +233,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     onPressed: () async {
                       //todo: login with google account
-                      UserCredential? userCredential = await _signInWithGoogle(
-                          context);
-                      if (userCredential?.user != null) {
-                        // User signed in successfully!
-                        print('Signed in with Google: ${userCredential!.user!
-                            .displayName}');
-                        // Navigate to your home screen or next part of the app
-                      }
+                      ///signInWithGoogle();
+                      ///setState(() {});
                     }),
                 SizedBox(height: height * 0.03),
 
@@ -365,32 +360,102 @@ class _LoginScreenState extends State<LoginScreen> {
         print(e);
       }
     }
-    /*Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-    );*/
   }
 
-  Future<UserCredential?> _signInWithGoogle(BuildContext context) async {
+/*Future<UserCredential?> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth = await googleUser
-          ?.authentication;
+      // Show loading indicator
+      DialogUtils.showLoading(
+          context: context, message: 'Signing in with Google...');
 
-      if (googleAuth?.accessToken != null && googleAuth?.idToken != null) {
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth!.accessToken,
-          idToken: googleAuth.idToken,
-        );
-        return await FirebaseAuth.instance.signInWithCredential(credential);
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        // User cancelled the sign-in
+        DialogUtils.hideLoading(context);
       }
-      return null;
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+      await googleUser?.authentication;
+
+      if (googleAuth?.accessToken != null &&
+          googleAuth?.idToken != null) {
+        // Create a new credential
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
+
+        // Sign in to Firebase with the Google credential
+        final UserCredential userCredential =
+        await FirebaseAuth.instance
+            .signInWithCredential(credential);
+
+        final User? firebaseUser = userCredential.user;
+
+        if (firebaseUser != null) {
+          // Check if the user exists in your Firestore
+          MyUser? user = await FirebaseUtils
+              .readUserFromFireStore(firebaseUser.uid);
+
+          if (user == null) {
+            // New user, navigate to registration or create user
+            print(
+                'New Google user signed in: ${firebaseUser.displayName}');
+            // For simplicity, let's navigate to the register screen
+            DialogUtils.hideLoading(context);
+            Navigator.of(context)
+                .pushReplacementNamed(RegisterScreen.routeName);
+          }
+
+          // Update the user provider
+          var userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.updateUser(user!);
+
+          // Update the event list provider (if needed)
+          var eventListProvider = Provider.of<EventListProvider>(
+              context,
+              listen: false);
+          eventListProvider.changeSelectedIndex(
+              0, userProvider.currentUser!.id);
+
+          // Hide loading indicator
+          DialogUtils.hideLoading(context);
+
+          // Navigate to the home screen
+          Navigator.of(context)
+              .pushReplacementNamed(HomeScreen.routeName);
+        } else {
+          // Firebase sign-in failed
+          DialogUtils.hideLoading(context);
+          DialogUtils.showMessage(
+            context: context,
+            title: 'Error',
+            message: 'Firebase sign-in with Google failed.',
+            posActionName: 'Ok',
+          );
+        }
+      } else {
+        // Google authentication failed
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(
+          context: context,
+          title: 'Error',
+          message: 'Google authentication failed.',
+          posActionName: 'Ok',
+        );
+      }
     } catch (e) {
+      // Handle any errors during Google sign-in
       print('Error signing in with Google: $e');
-      // Optionally show an error message to the user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in with Google.')),
+      DialogUtils.hideLoading(context);
+      DialogUtils.showMessage(
+        context: context,
+        message: 'Failed to sign in with Google: $e',
+        title: 'Error',
+        posActionName: 'Ok',
       );
-      return null;
     }
-  }
+  }*/
 }

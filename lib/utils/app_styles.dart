@@ -53,6 +53,11 @@ class AppStyles {
       fontSize: 20,
       color: AppColors.primaryLight
   );
+  static TextStyle medium24Primary = TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 24,
+      color: AppColors.primaryLight
+  );
   static TextStyle medium20Black = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 20,

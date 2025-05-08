@@ -53,4 +53,11 @@ class AppAssets {
   static const String calenderIconDark = 'assets/images/Calendar_icon_dark.png';
   static const String locationIconDark = 'assets/images/location_icon_dark.png';
   static const String timeIconDark = 'assets/images/time_icon_dark.png';
+  static const String editIcon2 = 'assets/images/Edit 2.png';
+  static const String deleteIcon = 'assets/images/delete2.png';
+  static const String calenderDetailsDark =
+      'assets/images/calender_details_dark.png';
+  static const String calenderDetailsLight =
+      'assets/images/calender_details_light.png';
+  static const String mapDetails = 'assets/images/map_details.png';
 }
