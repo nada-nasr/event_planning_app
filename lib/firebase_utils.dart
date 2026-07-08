@@ -43,4 +43,15 @@ class FirebaseUtils {
     return docRef.set(event);
   }
 
+  static Future<void> createUserInFireStore(MyUser user) async {
+    try {
+      await getUsersCollection().doc(user.id).set(user);
+      print('User document created successfully for user ID: ${user.id}');
+    } catch (e) {
+      print("Error creating user in Firestore: $e");
+      throw e;
+    }
+  }
+
 }
+

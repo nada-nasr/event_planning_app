@@ -65,6 +65,7 @@
   "update_event": "Update Event",
   "please_enter_event_title": "Please enter event title",
   "please_enter_event_description": "Please enter event description",
-  "please_select_date_and_time": "Please select date and time",
-  "en": "EN"
+  "please_select_date_and_time_and_location": " Please select date, time and location",
+  "en": "EN",
+  "ar": "Ar"
 }

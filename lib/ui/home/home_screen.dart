@@ -5,8 +5,8 @@ import 'package:event_planning_app/ui/home/tabs/map_tab/map_tab.dart';
 import 'package:event_planning_app/ui/home/tabs/profile_tab/profile_tab.dart';
 import 'package:event_planning_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../utils/app_assets.dart';
 
 class HomeScreen extends StatefulWidget {

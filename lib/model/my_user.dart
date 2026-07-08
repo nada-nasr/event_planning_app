@@ -4,11 +4,15 @@ class MyUser {
   String id;
   String name;
   String email;
+  double? latitude;
+  double? longitude;
 
   MyUser({
     required this.id,
     required this.name,
     required this.email,
+    this.latitude,
+    this.longitude,
   });
 
   //todo: ison => object
@@ -18,8 +22,9 @@ class MyUser {
     /// casting
     name: data['name'] as String,
     email: data['email'] as String,
-
-  );
+        latitude: (data['latitude'] as num?)?.toDouble(),
+        longitude: (data['longitude'] as num?)?.toDouble(),
+      );
 
   //todo: object => json
   Map<String, dynamic> toJson() {
@@ -27,6 +32,8 @@ class MyUser {
       'id': id,
       'name': name,
       'email': email,
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 }

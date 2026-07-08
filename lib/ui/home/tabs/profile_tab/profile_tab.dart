@@ -3,9 +3,10 @@ import 'package:event_planning_app/ui/authentication/login/login_screen.dart';
 import 'package:event_planning_app/utils/app_assets.dart';
 import 'package:event_planning_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../providers/language_provider.dart';
 import '../../../../providers/user_provider.dart';
 import '../../../../utils/app_colors.dart';
@@ -240,6 +241,8 @@ class _ProfileTabState extends State<ProfileTab> {
                         horizontal: width * 0.06, vertical: height * 0.02)
                 ),
                 onPressed: () {
+                  GoogleSignIn googleSignIn = GoogleSignIn();
+                  googleSignIn.disconnect();
                   ///FirebaseAuth.instance.signOut();
                   Navigator.of(context).pushReplacementNamed(
                       LoginScreen.routeName);

@@ -65,6 +65,7 @@
   "update_event": "تحديث الحدث",
   "please_enter_event_title": "الرجاء إدخال عنوان الحدث",
   "please_enter_event_description": "الرجاء إدخال وصف الحدث",
-  "please_select_date_and_time": "الرجاء تحديد التاريخ والوقت",
-  "ar": "عربي"
+  "please_select_date_and_time_and_location": "الرجاء تحديد التاريخ والوقت والموقع",
+  "ar": "عربي",
+  "en": "الانجليزية"
 }

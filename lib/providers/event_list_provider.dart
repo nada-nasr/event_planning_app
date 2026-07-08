@@ -3,9 +3,9 @@ import 'package:event_planning_app/model/event.dart';
 import 'package:event_planning_app/utils/app_colors.dart';
 import 'package:event_planning_app/utils/toast_utils.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../firebase_utils.dart';
+import '../l10n/app_localizations.dart';
 
 class EventListProvider extends ChangeNotifier {
   // data
