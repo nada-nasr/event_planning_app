@@ -1,16 +1,55 @@
-# event_planning_app
+# 🎉Evently App
+A modern event management mobile application built using Flutter, designed to provide users with a smooth and intuitive experience for discovering and organizing events.This application provides a clean, user-friendly interface combined with a scalable architecture to simplify the event experience. It focuses on usability, performance, and maintainability.
 
-A new Flutter project.
+# 🌟Features
+- 📅 Event Listing & Browsing
+- 🔍 Search Functionality
+- 📝 Event Details View
+- ❤️ Favorites System
+- 📱 Clean & Responsive UI
 
-## Getting Started
+# 🛠Techniques Used
+- Flutter
+- Dart
+- Localizations
+- Dynamic Theming
+- Version Control
+- Git & GitHub
+- State Management (Provider)
+- Architectural pattern
+- SharedPreferences
+- Firebase (Firestore, Authentication)
+- Google Maps integration
 
-This project is a starting point for a Flutter application.
+# 🧩Packages Used
+The following key packages were utilized in the development of this application:
+```javascript
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
-A few resources to get you started if this is your first Flutter project:
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  #google_fonts: ^6.2.1
+  provider: ^6.1.4
+  animated_toggle_switch: ^0.8.4
+  language_code: ^0.7.1
+  icons_plus: ^5.0.0
+  smooth_page_indicator: ^2.0.1
+  firebase_core: ^4.11.0
+  cloud_firestore: ^6.6.0
+  fluttertoast: ^9.1.0
+  firebase_auth: ^6.5.4
+  google_sign_in: ^6.3.0
+  shared_preferences: ^2.5.3
+  google_maps_flutter: ^2.12.1
+  geocoding: ^4.0.0
+  geolocator: ^14.0.0
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# 🌐Demo
