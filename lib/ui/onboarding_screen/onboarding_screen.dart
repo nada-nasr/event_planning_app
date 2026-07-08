@@ -1,9 +1,9 @@
 import 'package:event_planning_app/utils/app_assets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../providers/theme_provider.dart';
 import '../../utils/app_colors.dart';
 import '../authentication/login/login_screen.dart';

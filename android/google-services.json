@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "860442492797",
+    "project_id": "evently-app-12",
+    "storage_bucket": "evently-app-12.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860442492797:android:02317f0a48675281b15614",
+        "android_client_info": {
+          "package_name": "com.example.event_planning_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860442492797-nb486sm0045cm8m4b645dahpu9nklpd2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCy449d4Do_JB1D9_3SHJtmfyk6aVY8w-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860442492797-nb486sm0045cm8m4b645dahpu9nklpd2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "860442492797-47vae1i1bivmvagiv5rqdf5ig7i8jqjc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eventPlanningApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

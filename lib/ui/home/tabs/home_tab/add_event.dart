@@ -1,4 +1,4 @@
-import 'package:event_planning_app/model/event.dart';
+/*import 'package:event_planning_app/model/event.dart';
 import 'package:event_planning_app/ui/home/tabs/home_tab/event_tab_item.dart';
 import 'package:event_planning_app/ui/home/widget/custom_elevated_button.dart';
 import 'package:event_planning_app/ui/home/widget/custom_text_field.dart';
@@ -10,8 +10,11 @@ import 'package:event_planning_app/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../firebase_utils.dart';
+import '../../../../providers/event_list_provider.dart';
 import '../../../../providers/theme_provider.dart';
+import '../../../../providers/user_provider.dart';
 
 class AddEvent extends StatefulWidget {
   static const String routeName = 'add_event';
@@ -35,12 +38,14 @@ class _AddEventState extends State<AddEvent> {
   TextEditingController descriptionController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
+  late EventListProvider eventListProvider;
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     var themeProvider = Provider.of<ThemeProvider>(context);
+    eventListProvider = Provider.of<EventListProvider>(context);
     List<String> eventsNameList = [
       AppLocalizations.of(context)!.sport,
       AppLocalizations.of(context)!.birthday,
@@ -63,8 +68,8 @@ class _AddEventState extends State<AddEvent> {
       AppAssets.holidayImg,
       AppAssets.eatingImg,
     ];
-    String selectedImage = imageSelectedEventList[selectedIndex];
-    String selectedEventName = eventsNameList[selectedIndex];
+    selectedImage = imageSelectedEventList[selectedIndex];
+    selectedEventName = eventsNameList[selectedIndex];
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -144,7 +149,8 @@ class _AddEventState extends State<AddEvent> {
                               : AppColors.primaryLight,
                       validator: (text) {
                         if (text!.isEmpty) {
-                          return 'Please enter event title ';
+                          return AppLocalizations.of(context)!
+                              .please_enter_event_title;
                         }
                         return null;
                       },
@@ -172,7 +178,8 @@ class _AddEventState extends State<AddEvent> {
                               : AppColors.primaryLight,
                       validator: (text) {
                         if (text!.isEmpty) {
-                          return 'Please enter event description ';
+                          return AppLocalizations.of(context)!
+                              .please_enter_event_description;
                         }
                         return null;
                       },
@@ -272,6 +279,15 @@ class _AddEventState extends State<AddEvent> {
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(Duration(days: 365)),
+      builder: (context, child) =>
+          Theme(
+            data: ThemeData().copyWith(
+                colorScheme: ColorScheme.light(
+                    primary: AppColors.primaryLight,
+                    onPrimary: AppColors.whiteColor
+                )),
+            child: child!,
+          ),
     );
     if (chooseDate != null) {
       setState(() {
@@ -298,7 +314,8 @@ class _AddEventState extends State<AddEvent> {
     if (selectedDate == null || selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please select date and time'),
+          content: Text(
+              AppLocalizations.of(context)!.please_select_date_and_time),
           backgroundColor: Colors.red,
         ),
       );
@@ -313,7 +330,20 @@ class _AddEventState extends State<AddEvent> {
       time: formatTime!,
       dateTime: selectedDate!,
     );
-    FirebaseUtils.addEventToFireStore(event).timeout(
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+    FirebaseUtils.addEventToFireStore(event, userProvider.currentUser!.id)
+        .then((value) {
+      //todo: toast
+      ToastUtils.toastMsg(
+        bgColor: AppColors.primaryLight,
+        textColor: AppColors.whiteColor,
+        msg: 'Event Added Successfully',
+      );
+      //todo: refresh events
+      eventListProvider.getAllEvents(userProvider.currentUser!.id);
+      Navigator.pop(context);
+    },
+    ).timeout(
       Duration(milliseconds: 500),
       onTimeout: () {
         //todo: toast
@@ -322,11 +352,447 @@ class _AddEventState extends State<AddEvent> {
           textColor: AppColors.whiteColor,
           msg: 'Event Added Successfully',
         );
+        //todo: refresh events
+        eventListProvider.getAllEvents(userProvider.currentUser!.id);
         Navigator.pop(context);
       },
     );
 
     /// success offline
     /// FirebaseUtils.addEventToFireStore(event).then(); /// success online
+  }
+}*/
+
+import 'package:event_planning_app/model/event.dart';
+import 'package:event_planning_app/ui/home/tabs/home_tab/event_tab_item.dart';
+import 'package:event_planning_app/ui/home/widget/custom_elevated_button.dart';
+import 'package:event_planning_app/ui/home/widget/custom_text_field.dart';
+import 'package:event_planning_app/ui/home/widget/event_date_or_time.dart';
+import 'package:event_planning_app/utils/app_assets.dart';
+import 'package:event_planning_app/utils/app_colors.dart';
+import 'package:event_planning_app/utils/app_styles.dart';
+import 'package:event_planning_app/utils/toast_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../firebase_utils.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../providers/event_list_provider.dart';
+import '../../../../providers/theme_provider.dart';
+import '../../../../providers/user_provider.dart';
+import '../map_tab/map_selection_screen.dart';
+
+class AddEvent extends StatefulWidget {
+  static const String routeName = 'add_event';
+
+  const AddEvent({super.key});
+
+  @override
+  State<AddEvent> createState() => _AddEventState();
+}
+
+var formKey = GlobalKey<FormState>();
+
+class _AddEventState extends State<AddEvent> {
+  int selectedIndex = 0;
+  DateTime? selectedDate;
+  String? formatTime = '';
+  TimeOfDay? selectedTime;
+  String selectedImage = '';
+  String selectedEventName = '';
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  LatLng? selectedLocation;
+  String? locationText;
+  String? areaName;
+
+  var formKey = GlobalKey<FormState>();
+  late EventListProvider eventListProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    var width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    var height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    var themeProvider = Provider.of<ThemeProvider>(context);
+    eventListProvider = Provider.of<EventListProvider>(context);
+    List<String> eventsNameList = [
+      AppLocalizations.of(context)!.sport,
+      AppLocalizations.of(context)!.birthday,
+      AppLocalizations.of(context)!.meeting,
+      AppLocalizations.of(context)!.gaming,
+      AppLocalizations.of(context)!.workshop,
+      AppLocalizations.of(context)!.book_club,
+      AppLocalizations.of(context)!.exhibition,
+      AppLocalizations.of(context)!.holiday,
+      AppLocalizations.of(context)!.eating,
+    ];
+    List<String> imageSelectedEventList = [
+      AppAssets.sportImg,
+      AppAssets.birthdayImg,
+      AppAssets.meetingImg,
+      AppAssets.gamingImg,
+      AppAssets.workshopImg,
+      AppAssets.bookClubImg,
+      AppAssets.exhibitionImg,
+      AppAssets.holidayImg,
+      AppAssets.eatingImg,
+    ];
+    selectedImage = imageSelectedEventList[selectedIndex];
+    selectedEventName = eventsNameList[selectedIndex];
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context)!.create_event,
+          style: AppStyles.medium20Primary,
+        ),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(selectedImage),
+              ),
+              SizedBox(height: height * 0.02),
+              SizedBox(
+                height: height * 0.06,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        selectedIndex = index;
+                        setState(() {});
+                      },
+                      child: EventTabItem(
+                        borderColor: AppColors.primaryLight,
+                        selectedTextStyle: AppStyles.medium16white,
+                        unSelectedTextStyle:
+                        Theme
+                            .of(context)
+                            .textTheme
+                            .headlineSmall!,
+                        selectedBackgroundColor: AppColors.primaryLight,
+                        eventName: eventsNameList[index],
+
+                        ///iconName: Icons.directions_bike_rounded,
+                        isSelected: selectedIndex == index,
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(width: width * 0.02);
+                  },
+                  itemCount: eventsNameList.length,
+                ),
+              ),
+              SizedBox(height: height * 0.02),
+              Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.title,
+                      style:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? AppStyles.medium16black
+                          : AppStyles.medium16white,
+                    ),
+                    SizedBox(height: height * 0.01),
+                    CustomTextField(
+                      controller: titleController,
+                      hintText: AppLocalizations.of(context)!.event_title,
+                      hintStyle:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? AppStyles.medium16Gray
+                          : AppStyles.medium16white,
+                      prefixIcon:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? Image.asset(AppAssets.editIcon)
+                          : Image.asset(AppAssets.editIconDark),
+                      borderColor:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? AppColors.greyColor
+                          : AppColors.primaryLight,
+                      validator: (text) {
+                        if (text!.isEmpty) {
+                          return AppLocalizations.of(context)!
+                              .please_enter_event_title;
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: height * 0.02),
+                    Text(
+                      AppLocalizations.of(context)!.description,
+                      style:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? AppStyles.medium16black
+                          : AppStyles.medium16white,
+                    ),
+                    SizedBox(height: height * 0.01),
+                    CustomTextField(
+                      maxLines: 4,
+                      controller: descriptionController,
+                      hintText: AppLocalizations.of(context)!.event_description,
+                      hintStyle:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? AppStyles.medium16Gray
+                          : AppStyles.medium16white,
+                      borderColor:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? AppColors.greyColor
+                          : AppColors.primaryLight,
+                      validator: (text) {
+                        if (text!.isEmpty) {
+                          return AppLocalizations.of(context)!
+                              .please_enter_event_description;
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: height * 0.02),
+                    EventDateOrTime(
+                      iconDateOrTime:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? AppAssets.calenderIcon
+                          : AppAssets.calenderIconDark,
+                      eventDateOrTime: AppLocalizations.of(context)!.event_date,
+                      choosetDateOrTime:
+                      selectedDate == null
+                          ? AppLocalizations.of(context)!.choose_date
+                          : '${selectedDate!.day}/${selectedDate!
+                          .month}/${selectedDate!.year}',
+                      onChooseDateOrTime: chooseDate,
+                    ),
+                    SizedBox(height: height * 0.01),
+                    EventDateOrTime(
+                      iconDateOrTime:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? AppAssets.timeIcon
+                          : AppAssets.timeIconDark,
+                      eventDateOrTime: AppLocalizations.of(context)!.event_time,
+                      choosetDateOrTime:
+                      selectedTime == null
+                          ? AppLocalizations.of(context)!.choose_time
+                          : selectedTime!.format(context),
+
+                      ///formatTime!,
+                      onChooseDateOrTime: chooseTime,
+                    ),
+                    SizedBox(height: height * 0.02),
+                    Text(
+                      AppLocalizations.of(context)!.location,
+                      style:
+                      themeProvider.currentTheme == ThemeMode.light
+                          ? AppStyles.medium16black
+                          : AppStyles.medium16white,
+                    ),
+                    SizedBox(height: height * 0.02),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.02,
+                        vertical: height * 0.008,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.primaryLight,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          themeProvider.currentTheme == ThemeMode.light
+                              ? Image.asset(AppAssets.locationIcon)
+                              : Image.asset(AppAssets.locationIconDark),
+                          SizedBox(width: width * 0.02),
+                          Expanded(
+                            child: Text(
+                              locationText ?? AppLocalizations.of(
+                                context,
+                              )!.choose_event_location,
+                              style: locationText != null
+                                  ? AppStyles.medium16Primary
+                                  : AppStyles.medium16Gray,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: AppColors.primaryLight,
+                            ),
+                            onPressed: () {
+                              selectLocation(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: height * 0.02),
+                    CustomElevatedButton(
+                      onButtonClick: addEvent,
+                      text: AppLocalizations.of(context)!.add_event,
+                    ),
+                    SizedBox(height: height * 0.02),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void chooseDate() async {
+    var chooseDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(Duration(days: 365)),
+      builder: (context, child) =>
+          Theme(
+            data: ThemeData().copyWith(
+                colorScheme: ColorScheme.light(
+                    primary: AppColors.primaryLight,
+                    onPrimary: AppColors.whiteColor
+                )),
+            child: child!,
+          ),
+    );
+    if (chooseDate != null) {
+      setState(() {
+        selectedDate = chooseDate;
+      });
+    }
+  }
+
+  void chooseTime() async {
+    var chooseTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime ?? TimeOfDay.now(),
+    );
+    if (chooseTime != null) {
+      setState(() {
+        selectedTime = chooseTime;
+        formatTime = selectedTime!.format(context);
+      });
+    }
+  }
+
+  void addEvent() {
+    if (formKey.currentState!.validate() == true) {}
+    if (selectedDate == null || selectedTime == null ||
+        selectedLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!
+                .please_select_date_and_time_and_location,
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    //todo: add event to database
+    Event event = Event(
+      image: selectedImage,
+      title: titleController.text,
+      description: descriptionController.text,
+      eventName: selectedEventName,
+      time: formatTime!,
+      dateTime: selectedDate!,
+      latitude: selectedLocation!.latitude,
+      longitude: selectedLocation!.longitude,
+      locationName: areaName,
+    );
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+    FirebaseUtils.addEventToFireStore(event, userProvider.currentUser!.id)
+        .then((value) {
+      //todo: toast
+      ToastUtils.toastMsg(
+        bgColor: AppColors.primaryLight,
+        textColor: AppColors.whiteColor,
+        msg: 'Event Added Successfully',
+      );
+      //todo: refresh events
+      eventListProvider.getAllEvents(userProvider.currentUser!.id);
+      Navigator.pop(context);
+    },
+    ).timeout(
+      Duration(milliseconds: 500),
+      onTimeout: () {
+        //todo: toast
+        ToastUtils.toastMsg(
+          bgColor: AppColors.primaryLight,
+          textColor: AppColors.whiteColor,
+          msg: 'Event Added Successfully',
+        );
+        //todo: refresh events
+        eventListProvider.getAllEvents(userProvider.currentUser!.id);
+        Navigator.pop(context);
+      },
+    );
+
+    /// success offline
+    /// FirebaseUtils.addEventToFireStore(event).then(); /// success online
+  }
+
+  Future<void> selectLocation(BuildContext context) async {
+    final LatLng? location = await Navigator.push<LatLng>(
+      context,
+      MaterialPageRoute(builder: (context) => const MapSelectionScreen()),
+    );
+    if (location != null) {
+      setState(() {
+        selectedLocation = location;
+        getLocationName(location);
+        locationText = 'Latitude: ${location.latitude.toStringAsFixed(
+            4)}, Longitude: ${location.longitude.toStringAsFixed(4)}';
+      });
+    }
+  }
+
+  Future<void> getLocationName(LatLng latLng) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        latLng.latitude,
+        latLng.longitude,
+      );
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks[0];
+        setState(() {
+          areaName = '${place.locality}, ${place.administrativeArea}, ${place
+              .country}'; // Or your preferred format
+          locationText = areaName;
+        });
+      } else {
+        setState(() {
+          areaName = null;
+          locationText = 'Location not found';
+        });
+      }
+    } catch (e) {
+      print('Error getting location name: $e');
+      setState(() {
+        areaName = null;
+        locationText = 'Error getting location';
+      });
+    }
   }
 }

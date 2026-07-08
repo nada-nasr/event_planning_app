@@ -1,11 +1,14 @@
 import 'package:event_planning_app/providers/theme_provider.dart';
+import 'package:event_planning_app/ui/authentication/login/login_screen.dart';
 import 'package:event_planning_app/utils/app_assets.dart';
 import 'package:event_planning_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../providers/language_provider.dart';
+import '../../../../providers/user_provider.dart';
 import '../../../../utils/app_colors.dart';
 
 class ProfileTab extends StatefulWidget {
@@ -18,12 +21,26 @@ class ProfileTab extends StatefulWidget {
 }
 
 class _ProfileTabState extends State<ProfileTab> {
+  String? selectedLanguage;
+  ThemeMode? selectedTheme;
+
+  @override
+  void initState() {
+    super.initState();
+    final languageProvider = Provider.of<LanguageProvider>(
+        context, listen: false);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    selectedLanguage = languageProvider.currentLocale.languageCode;
+    selectedTheme = themeProvider.currentTheme;
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     var languageProvider = Provider.of<LanguageProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -41,9 +58,9 @@ class _ProfileTabState extends State<ProfileTab> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Route Academy',
+                Text(userProvider.currentUser!.name,
                   style: AppStyles.bold24white,),
-                Text('route@gmail.com',
+                Text(userProvider.currentUser!.email,
                   style: AppStyles.medium16white,)
               ],
             )
@@ -78,7 +95,17 @@ class _ProfileTabState extends State<ProfileTab> {
                   color: AppColors.primaryLight,
                   size: 34,
                 ),
-                initialSelection: languageProvider.currentLocal,
+                initialSelection: selectedLanguage,
+
+                ///languageProvider.currentLocal,
+                onSelected: (String? value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedLanguage = value; // Update the state
+                    });
+                    languageProvider.changeLanguage(value);
+                  }
+                },
                 inputDecorationTheme: InputDecorationTheme(
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -115,13 +142,13 @@ class _ProfileTabState extends State<ProfileTab> {
                     ),
                   ),
                 ],
-                onSelected: (value) {
+                /*onSelected: (value) {
                   if (value == 'en') {
                     languageProvider.changeLanguage('en');
                   } else if (value == 'ar') {
                     languageProvider.changeLanguage('ar');
                   }
-                },
+                },*/
               ),
             ),
 
@@ -147,7 +174,17 @@ class _ProfileTabState extends State<ProfileTab> {
                   color: AppColors.primaryLight,
                   size: 34,
                 ),
-                initialSelection: themeProvider.currentTheme,
+                initialSelection: selectedTheme,
+
+                ///themeProvider.currentTheme,
+                onSelected: (ThemeMode? value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedTheme = value; // Update the state
+                    });
+                    themeProvider.changeTheme(value);
+                  }
+                },
                 inputDecorationTheme: InputDecorationTheme(
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -184,13 +221,13 @@ class _ProfileTabState extends State<ProfileTab> {
                     ),
                   ),
                 ],
-                onSelected: (value) {
+                /*onSelected: (value) {
                   if (value == ThemeMode.light) {
                     themeProvider.changeTheme(ThemeMode.light);
                   } else if (value == ThemeMode.dark) {
                     themeProvider.changeTheme(ThemeMode.dark);
                   }
-                },
+                },*/
               ),
             ),
             Spacer(),
@@ -203,7 +240,13 @@ class _ProfileTabState extends State<ProfileTab> {
                     padding: EdgeInsets.symmetric(
                         horizontal: width * 0.06, vertical: height * 0.02)
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  GoogleSignIn googleSignIn = GoogleSignIn();
+                  googleSignIn.disconnect();
+                  ///FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushReplacementNamed(
+                      LoginScreen.routeName);
+                },
                 child: Row(
                   children: [
                     Icon(Icons.logout, color: AppColors.whiteColor, size: 25,),
